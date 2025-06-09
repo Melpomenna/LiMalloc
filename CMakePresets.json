@@ -1,0 +1,198 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 19,
+      "patch": 0
+    },
+    "configurePresets": [
+    {
+      "name": "base",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_CXX_STANDARD": "20",
+        "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+        "CMAKE_C_STANDARD": "11",
+        "CMAKE_C_STANDARD_REQUIRED": "YES",
+        "CMAKE_MEMORY_LIBRARY_NAME": "limemory"
+      }
+    },
+      {
+        "inherits": "base",
+        "name": "base-Windows-x64",
+        "hidden": true,
+        "generator": "Visual Studio 17 2022"
+      },
+      {
+        "inherits": "base",
+        "name": "base-Linux",
+        "hidden": true,
+        "generator": "Unix Makefiles"
+      },
+      {
+        "inherits": "base",
+        "name": "base-MacOS",
+        "hidden": true,
+        "generator": "Xcode",
+        "cacheVariables": {
+          "CMAKE_C_COMPILER": "clang",
+          "CMAKE_CXX_COMPILER": "clang++",
+          "CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE": "PRE_TEST"
+        }
+      },
+      {
+        "name": "release-Windows",
+        "inherits": "base-Windows-x64",
+        "binaryDir": "${sourceDir}/build/release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release"
+        }
+      },
+      {
+        "name": "debug-Windows",
+        "inherits": "base-Windows-x64",
+        "binaryDir": "${sourceDir}/build/debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug"
+        }
+      },
+      {
+        "name": "release-Linux",
+        "inherits": "base-Linux",
+        "binaryDir": "${sourceDir}/build/release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release"
+        }
+      },
+      {
+        "name": "debug-Linux",
+        "inherits": "base-Linux",
+        "binaryDir": "${sourceDir}/build/debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug"
+        }
+      },
+            {
+        "name": "release-MacOS",
+        "inherits": "base-MacOS",
+        "binaryDir": "${sourceDir}/build/release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release"
+        }
+      },
+      {
+        "name": "debug-MacOS",
+        "inherits": "base-MacOS",
+        "binaryDir": "${sourceDir}/build/debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug"
+        }
+      }
+    ],
+    "buildPresets": [
+      {
+        "name": "release-Windows",
+        "configurePreset": "release-Windows",
+        "configuration": "Release",
+        "jobs": 12
+      },
+      {
+        "name": "debug-Windows",
+        "configurePreset": "debug-Windows",
+        "configuration": "Debug",
+        "jobs": 7
+      },
+            {
+        "name": "release-Linux",
+        "configurePreset": "release-Linux",
+        "configuration": "Release",
+        "jobs": 12
+      },
+      {
+        "name": "debug-Linux",
+        "configurePreset": "debug-Linux",
+        "configuration": "Debug",
+        "jobs": 7
+      },
+            {
+        "name": "release-MacOS",
+        "configurePreset": "release-MacOS",
+        "configuration": "Release",
+        "jobs": 12
+      },
+      {
+        "name": "debug-MacOS",
+        "configurePreset": "debug-MacOS",
+        "configuration": "Debug",
+        "jobs": 7
+      }
+    ],
+    "testPresets": [
+      {
+        "name": "release-Windows",
+        "configurePreset": "release-Windows",
+        "output": {
+          "outputOnFailure": true
+        },
+        "execution": {
+          "noTestsAction": "error",
+          "stopOnFailure": true
+        }
+      },
+      {
+        "name": "debug-Windows",
+        "configurePreset": "debug-Windows",
+        "output": {
+          "outputOnFailure": true
+        },
+        "execution": {
+          "noTestsAction": "error",
+          "stopOnFailure": true
+        }
+      },
+      {
+        "name": "release-Linux",
+        "configurePreset": "release-Linux",
+        "output": {
+          "outputOnFailure": true
+        },
+        "execution": {
+          "noTestsAction": "error",
+          "stopOnFailure": true
+        }
+      },
+      {
+        "name": "debug-Linux",
+        "configurePreset": "debug-Linux",
+        "output": {
+          "outputOnFailure": true
+        },
+        "execution": {
+          "noTestsAction": "error",
+          "stopOnFailure": true
+        }
+      },
+      {
+        "name": "release-MacOS",
+        "configurePreset": "release-MacOS",
+        "output": {
+          "outputOnFailure": true
+        },
+        "execution": {
+          "noTestsAction": "error",
+          "stopOnFailure": true
+        }
+      },
+      {
+        "name": "debug-MacOS",
+        "configurePreset": "debug-MacOS",
+        "output": {
+          "outputOnFailure": true
+        },
+        "execution": {
+          "noTestsAction": "error",
+          "stopOnFailure": true
+        }
+      }
+    ]
+  }

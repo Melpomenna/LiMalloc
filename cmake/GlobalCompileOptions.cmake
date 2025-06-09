@@ -1,0 +1,32 @@
+function(__SetGlobalCompileOptionsMSVC)
+    add_compile_options(/EHs)
+    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        add_link_options(/INCREMENTAL:NO)
+        add_compile_options(/MTd
+                            /fsanitize=address )
+    else()
+        add_link_options(/LTCG:INCREMENTAL)
+        add_compile_options(/MT)
+    endif()
+endfunction()
+
+function(__SetGlobalCompileOptionsMacOS)
+    if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    else()
+        add_compile_options(-march=native -flto)
+    endif()
+endfunction()
+
+function(__SetGlobalCompileOptionsLinux)
+
+endfunction()
+
+function(SetGlobalCompileOptions)
+    if (MSVC)
+        __SetGlobalCompileOptionsMSVC()
+    elseif(APPLE)
+        __SetGlobalCompileOptionsMacOS()
+    elseif(LINUX)
+        __SetGlobalCompileOptionsLinux()
+    endif()
+endfunction()

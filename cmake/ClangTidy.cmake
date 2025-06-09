@@ -1,0 +1,11 @@
+function(UseClangTidy target)
+    find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+
+    if (NOT CLANG_TIDY_EXE)
+        message(WARNING "no command clang-tidy")
+    else ()
+        message(STATUS "Set clang-tidy for ${target}")
+        set(CLANG_TIDY_COMMAND "${CLANG_TIDY_EXE}" "--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy")
+        set_target_properties(${target} PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
+    endif ()
+endfunction()
