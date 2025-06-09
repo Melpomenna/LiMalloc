@@ -23,25 +23,27 @@ LiMalloc is a custom memory allocator library written in C. It is designed for e
 - Visual Studio 2022, Apple Clang, or GCC for building
 - Work on Windows, Linux and MacOS is supported
 - [GoogleTest (GTest)](https://github.com/google/googletest) for unit testing
-- [Google Benchmark]](hhtps://github.com/google/benchmark) for performance testing
+- [Google Benchmark](https://github.com/google/benchmark) for performance testing
 
 ### Building the Project
 
 1. Clone the repository:
-    ```sh
+```sh
     git clone <repository-url>
     cd LiMalloc
-    ```
+```
+
+2. 
 Build on Windows:
-    ```sh
+```sh
     cmake --preset=release-Windows
     cmake --build . --preset=release-Windows
-    ```
+```
 Build on Linux/MacOS:
-    ```sh
+```sh
     make
     make build
-    ``` 
+``` 
 
 ### Running Tests
 
