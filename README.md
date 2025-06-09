@@ -2,6 +2,8 @@
 
 # LiMalloc
 
+[![Build Status](https://dev.azure.com/mellpomeNn/LiMalloc/_apis/build/status%2FMelpomenna.LiMalloc?branchName=main)](https://dev.azure.com/mellpomeNn/LiMalloc/_build/latest?definitionId=2&branchName=main)
+
 LiMalloc is a custom memory allocator library written in C. It is designed for efficient and flexible memory management, suitable for use in performance-critical applications.
 
 ## Features
