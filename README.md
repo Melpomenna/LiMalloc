@@ -48,6 +48,16 @@ Build on Linux/MacOS:
 ### Running Tests
 
 Unit tests are written using GTest. To run the tests:
+On Windows
+```sh
+ctest --preset=release-Windows
+```
+
+On Linux/MacOS:
+```sh
+make tests
+```
+
 ## Usage
 
 Include the LiMalloc header in your project and use the provided allocator classes/functions to manage memory.
