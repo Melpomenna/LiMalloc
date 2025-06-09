@@ -10,6 +10,26 @@ static mem_size_t getAlignedBytes(mem_size_t alignment, mem_size_t bytes)
     return 0;
 }
 
+static mem_size_t getNearestBytes(mem_size_t bytes)
+{
+    return (bytes % MEMORY_SPACE_HUGE == 0 && bytes != MEMORY_SPACE_HUGE) || (bytes > MEMORY_SPACE_LARGE && bytes <= MEMORY_SPACE_HUGE) || bytes > MEMORY_SPACE_HUGE? MEMORY_SPACE_HUGE
+        : (bytes % MEMORY_SPACE_LARGE == 0 && bytes != MEMORY_SPACE_LARGE) || (bytes > MEMORY_SPACE_MEDIUM && bytes <= MEMORY_SPACE_LARGE)? MEMORY_SPACE_LARGE
+        : (bytes % MEMORY_SPACE_MEDIUM == 0 && bytes != MEMORY_SPACE_MEDIUM) || (bytes > MEMORY_SPACE_SMALL && bytes <= MEMORY_SPACE_MEDIUM)? MEMORY_SPACE_MEDIUM
+                                                                             : MEMORY_SPACE_SMALL;
+}
+
+static LinkedList_t* getNearestFirstFreeNodeBySize(LinkedList_t* root, mem_size_t bytes)
+{
+    LinkedList_t* begin = root;
+
+    while (begin && (begin->space < bytes || !begin->isFree))
+    {
+        begin = begin->next;
+    }
+
+    return begin;
+}
+
 void MACHINE_MEMORY_IMPL(defragmentation)(void);
 
 mem_ptr_t MACHINE_MEMORY_IMPL(malloc)(mem_size_t bytes)
@@ -17,17 +37,50 @@ mem_ptr_t MACHINE_MEMORY_IMPL(malloc)(mem_size_t bytes)
     Area_t* area = __getArena();
     area->kernelMutex.lock();
     if (bytes > area->root->freeSpace)
+    {
         __overCommit(bytes);
+        if (bytes > area->root->freeSpace)
+        {
+            area->kernelMutex.unlock();
+            return 0;
+        }
+
+    }
     area->kernelMutex.unlock();
     LinkedList_t* begin = area->root->begin;
-    int needMerge = 0;
-    needMerge = bytes % MEMORY_SPACE_SMALL == 0 && bytes != MEMORY_SPACE_SMALL;
-    needMerge = bytes % MEMORY_SPACE_MEDIUM == 0 && bytes != MEMORY_SPACE_MEDIUM;
-    needMerge = bytes % MEMORY_SPACE_LARGE == 0 && bytes != MEMORY_SPACE_LARGE;
-    needMerge = bytes % MEMORY_SPACE_HUGE == 0 && bytes != MEMORY_SPACE_HUGE;
-    if (needMerge)
+    int needMergeBySmallSpace = bytes % MEMORY_SPACE_SMALL == 0 && bytes != MEMORY_SPACE_SMALL;
+    int needMergeByMediumSpace = bytes % MEMORY_SPACE_MEDIUM == 0 && bytes != MEMORY_SPACE_MEDIUM;
+    int needMergeByLargeSpace = bytes % MEMORY_SPACE_LARGE == 0 && bytes != MEMORY_SPACE_LARGE;
+    int needMergeByHugeSpace = bytes % MEMORY_SPACE_HUGE == 0 && bytes != MEMORY_SPACE_HUGE;
+    if (needMergeBySmallSpace || needMergeByHugeSpace || needMergeByMediumSpace || needMergeByLargeSpace)
     {
         MACHINE_MEMORY_IMPL(defragmentation)();
+        mem_size_t nearestBytes = getNearestBytes(bytes);
+        area->kernelMutex.lock();
+        LinkedList_t* nearest = getNearestFirstFreeNodeBySize(begin, nearestBytes);
+        area->kernelMutex.unlock();
+
+        if (nearest)
+        {
+            mem_size_t totalBytes = nearest->space;
+            while (totalBytes < bytes)
+            {
+                area->kernelMutex.lock();
+                LinkedList_t* node = mergeNode(area->root, nearest, nearest->next);
+                if (!node)
+                {
+                    area->kernelMutex.unlock();
+                    break; // TODO: what to do here?
+                }
+                totalBytes = node->space;
+                area->kernelMutex.unlock();
+            }
+            begin = nearest;
+        }
+        else
+        {
+            // TODO: what to do here?
+        }
     }
     DEBUG_LOG("malloc(): trying to allocate %llu bytes, begin:%p end:%p\n", bytes, begin, area->root->end);
     for (; begin; begin = begin->next)
