@@ -1,3 +1,37 @@
+/**
+ * @file export.h
+ * @brief Platform and compiler detection macros, export/import definitions, and utility macros for the memory module.
+ *
+ * This header defines macros for platform and compiler detection, symbol visibility (export/import),
+ * calling conventions, and various utility macros to ensure portability and correct linkage across
+ * different operating systems and compilers.
+ *
+ * @section Platforms
+ * - Windows:   OS_WIN
+ * - Linux:     OS_LINUX
+ * - macOS:     OS_MAC
+ *
+ * @section Compilers
+ * - GCC:       COMPILER_GCC
+ * - Clang:     COMPILER_CLANG
+ * - MSVC:      COMPILER_MSVC
+ *
+ * @section ExportMacros
+ * - MEMORY_API: Used for symbol export/import depending on platform and build context.
+ * - MEMORY_CALL: Calling convention macro.
+ * - MEMORY_ALLOC: Marks functions as memory allocators.
+ * - MEMORY_NODISCARD: Warns if return value is unused.
+ * - MEMORY_CHECK_SIZE: Marks functions with allocation size attributes.
+ * - MEMORY_LIKELY / MEMORY_UNLIKY: Branch prediction hints.
+ * - MEMORY_UNUSED: Suppresses unused variable warnings.
+ *
+ * @section MacroUtilities
+ * - MACHINE, MACHINE_IMPL, MACHINE_PREFIX, MACHINE_MEMORY_IMPL: Macro utilities for symbol naming.
+ *
+ * @note This file is intended for internal use by the memory module and should be included where
+ *       platform/compiler-specific behavior or symbol visibility is required.
+ */
+
 #pragma once
 
 #if defined(_WIN32) || defined(_WIN64)

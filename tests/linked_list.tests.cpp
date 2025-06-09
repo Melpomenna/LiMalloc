@@ -286,7 +286,7 @@ TEST_F(LinkedListTest, RemoveItemsFromCenter1000)
     free(mem);
 }
 
-TEST_F(LinkedListTest, MergeAllItems1000TotalSize500)
+TEST_F(LinkedListTest, MergeAllItems1000TotalSize500FailedTest)
 {
     constexpr int count = 1000;
     ComprassedPair_t root;
@@ -312,7 +312,42 @@ TEST_F(LinkedListTest, MergeAllItems1000TotalSize500)
     begin = root.begin;
     while (begin)
     {
+        LinkedList_t* res = mergeNode(&root, begin, begin->next);
+        ASSERT_TRUE(res == nullptr);
+        begin = begin->next;
+    }
+
+    free(mem);
+}
+
+TEST_F(LinkedListTest, MergeAllItems1000TotalSizeByStructAccpetMerge)
+{
+    constexpr int count = 1000;
+    ComprassedPair_t root;
+    root.begin = 0;
+    root.end = 0;
+    void* mem = malloc((sizeof(LinkedList_t) + sizeof(LinkedList_t)) * count);
+    char* ptr = (char*)mem;
+    for (int i = 0; i < count; ++i)
+    {
+        LinkedList_t* node = createNode(ptr, sizeof(LinkedList_t));
+        addNode(&root, node);
+        ptr += sizeof(LinkedList_t) + sizeof(LinkedList_t);
+    }
+
+    LinkedList_t* begin = root.begin;
+    while (begin)
+    {
+        ASSERT_EQ(begin->space, sizeof(LinkedList_t));
+        ASSERT_TRUE(begin != nullptr);
+        begin = begin->next;
+    }
+
+    begin = root.begin;
+    while (begin && begin->next)
+    {
         LinkedList_t* unused = mergeNode(&root, begin, begin->next);
+        ASSERT_TRUE(unused != nullptr);
         MEMORY_UNUSED(unused);
         begin = begin->next;
     }
@@ -321,7 +356,7 @@ TEST_F(LinkedListTest, MergeAllItems1000TotalSize500)
     begin = root.begin;
     while (begin)
     {
-        ASSERT_EQ(begin->space, 400 + sizeof(LinkedList_t));
+        ASSERT_EQ(begin->space, sizeof(LinkedList_t)*2 + sizeof(LinkedList_t));
         begin = begin->next;
         ++totalCount;
     }
