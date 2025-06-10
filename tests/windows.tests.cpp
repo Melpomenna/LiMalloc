@@ -1,3 +1,6 @@
+#include <memory/export.h>
+#pragma warning(disable : 4245 6326 4081 26439 26495)
+
 #include <gtest/gtest.h>
 #include <memory/__details/internal.h>
 

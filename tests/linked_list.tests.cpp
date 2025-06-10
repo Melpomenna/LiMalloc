@@ -1,5 +1,9 @@
-#include <gtest/gtest.h>
 #include <memory/__details/linked_list.h>
+#if COMPILER_MSVC
+#pragma warning(disable : 4245 6326 4081 26439 26495)
+#endif
+
+#include <gtest/gtest.h>
 
 class LinkedListTest : public ::testing::Test
 {
@@ -12,7 +16,7 @@ public:
 TEST_F(LinkedListTest, InsertItems10)
 {
     constexpr int count = 10;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -38,7 +42,7 @@ TEST_F(LinkedListTest, InsertItems10)
 TEST_F(LinkedListTest, InsertItems100)
 {
     constexpr int count = 100;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -64,7 +68,7 @@ TEST_F(LinkedListTest, InsertItems100)
 TEST_F(LinkedListTest, InsertItems1000)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -90,7 +94,7 @@ TEST_F(LinkedListTest, InsertItems1000)
 TEST_F(LinkedListTest, InsertItemsFront50)
 {
     constexpr int count = 50;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -117,7 +121,7 @@ TEST_F(LinkedListTest, InsertItemsFront50)
 TEST_F(LinkedListTest, InsertItemsFront100)
 {
     constexpr int count = 100;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -144,7 +148,7 @@ TEST_F(LinkedListTest, InsertItemsFront100)
 TEST_F(LinkedListTest, InsertItemsFront1000)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -171,7 +175,7 @@ TEST_F(LinkedListTest, InsertItemsFront1000)
 TEST_F(LinkedListTest, RemoveItemsFromBegin1000)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -209,7 +213,7 @@ TEST_F(LinkedListTest, RemoveItemsFromBegin1000)
 TEST_F(LinkedListTest, RemoveItemsFromEnd1000)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -243,7 +247,7 @@ TEST_F(LinkedListTest, RemoveItemsFromEnd1000)
 TEST_F(LinkedListTest, RemoveItemsFromCenter1000)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -289,7 +293,7 @@ TEST_F(LinkedListTest, RemoveItemsFromCenter1000)
 TEST_F(LinkedListTest, MergeAllItems1000TotalSize500FailedTest)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc(sizeof(LinkedList_t) * count);
@@ -323,7 +327,7 @@ TEST_F(LinkedListTest, MergeAllItems1000TotalSize500FailedTest)
 TEST_F(LinkedListTest, MergeAllItems1000TotalSizeByStructAccpetMerge)
 {
     constexpr int count = 1000;
-    ComprassedPair_t root;
+    ComprassedPair_t root = {};
     root.begin = 0;
     root.end = 0;
     void* mem = malloc((sizeof(LinkedList_t) + sizeof(LinkedList_t)) * count);
@@ -356,7 +360,7 @@ TEST_F(LinkedListTest, MergeAllItems1000TotalSizeByStructAccpetMerge)
     begin = root.begin;
     while (begin)
     {
-        ASSERT_EQ(begin->space, sizeof(LinkedList_t)*2 + sizeof(LinkedList_t));
+        ASSERT_EQ(begin->space, sizeof(LinkedList_t) * 2 + sizeof(LinkedList_t));
         begin = begin->next;
         ++totalCount;
     }

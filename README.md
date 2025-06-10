@@ -9,10 +9,8 @@ LiMalloc is a custom memory allocator library written in C. It is designed for e
 ## Features
 
 - Custom memory allocation and deallocation
-- Optimized for speed and low fragmentation
-- Thread-safe (if enabled)
+- Thread-safe
 - Configurable block sizes and alignment
-- C++20 compatible
 - C 11 compatible
 
 ## Getting Started

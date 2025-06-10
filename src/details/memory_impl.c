@@ -12,10 +12,16 @@ static mem_size_t getAlignedBytes(mem_size_t alignment, mem_size_t bytes)
 
 static mem_size_t getNearestBytes(mem_size_t bytes)
 {
-    return (bytes % MEMORY_SPACE_HUGE == 0 && bytes != MEMORY_SPACE_HUGE) || (bytes > MEMORY_SPACE_LARGE && bytes <= MEMORY_SPACE_HUGE) || bytes > MEMORY_SPACE_HUGE? MEMORY_SPACE_HUGE
-        : (bytes % MEMORY_SPACE_LARGE == 0 && bytes != MEMORY_SPACE_LARGE) || (bytes > MEMORY_SPACE_MEDIUM && bytes <= MEMORY_SPACE_LARGE)? MEMORY_SPACE_LARGE
-        : (bytes % MEMORY_SPACE_MEDIUM == 0 && bytes != MEMORY_SPACE_MEDIUM) || (bytes > MEMORY_SPACE_SMALL && bytes <= MEMORY_SPACE_MEDIUM)? MEMORY_SPACE_MEDIUM
-                                                                             : MEMORY_SPACE_SMALL;
+    return (bytes % MEMORY_SPACE_HUGE == 0 && bytes != MEMORY_SPACE_HUGE) ||
+            (bytes > MEMORY_SPACE_LARGE && bytes <= MEMORY_SPACE_HUGE) || bytes > MEMORY_SPACE_HUGE
+        ? MEMORY_SPACE_HUGE
+        : (bytes % MEMORY_SPACE_LARGE == 0 && bytes != MEMORY_SPACE_LARGE) ||
+            (bytes > MEMORY_SPACE_MEDIUM && bytes <= MEMORY_SPACE_LARGE)
+        ? MEMORY_SPACE_LARGE
+        : (bytes % MEMORY_SPACE_MEDIUM == 0 && bytes != MEMORY_SPACE_MEDIUM) ||
+            (bytes > MEMORY_SPACE_SMALL && bytes <= MEMORY_SPACE_MEDIUM)
+        ? MEMORY_SPACE_MEDIUM
+        : MEMORY_SPACE_SMALL;
 }
 
 static LinkedList_t* getNearestFirstFreeNodeBySize(LinkedList_t* root, mem_size_t bytes)
@@ -44,7 +50,6 @@ mem_ptr_t MACHINE_MEMORY_IMPL(malloc)(mem_size_t bytes)
             area->kernelMutex.unlock();
             return 0;
         }
-
     }
     area->kernelMutex.unlock();
     LinkedList_t* begin = area->root->begin;
@@ -85,7 +90,8 @@ mem_ptr_t MACHINE_MEMORY_IMPL(malloc)(mem_size_t bytes)
     DEBUG_LOG("malloc(): trying to allocate %llu bytes, begin:%p end:%p\n", bytes, begin, area->root->end);
     for (; begin; begin = begin->next)
     {
-        DEBUG_LOG("malloc(): checking node at %p with space %d and isFree %d\n", (void*)begin, begin->space, begin->isFree);
+        DEBUG_LOG("malloc(): checking node at %p with space %d and isFree %d\n", (void*)begin, begin->space,
+                  begin->isFree);
         area->kernelMutex.lock();
         if (begin->isFree && (mem_size_t)begin->space >= bytes)
         {
@@ -148,6 +154,35 @@ void MACHINE_MEMORY_IMPL(free_onlyfree)(mem_ptr_t ptr)
 
 void MACHINE_MEMORY_IMPL(defragmentation)(void)
 {
-
-    
+#if defined(DISABLED)
+    Area_t* area = __getArena();
+    area->kernelMutex.lock();
+    LinkedList_t* begin = area->root->begin;
+    // (n^2) algorithm to sort the linked list by poiter
+    while (begin)
+    {
+        if ((char*)begin + begin->space + sizeof(LinkedList_t) == (char*)begin->next)
+        {
+            begin = begin->next;
+            continue;
+        }
+        LinkedList_t* current = begin->next;
+        while (current)
+        {
+            if ((char*)begin + begin->space + sizeof(LinkedList_t) == (char*)current)
+                break;
+            current = current->next;
+        }
+        insertAfter(area->root, begin, current);
+#if COMPILER_MSVC
+#pragma warning(push)
+#pragma warning(disable : 6011) // Dereferencing NULL pointer
+#endif
+        begin = begin->next;
+#if COMPILER_MSVC
+#pragma warning(pop)
+#endif
+    }
+    area->kernelMutex.unlock();
+#endif
 }

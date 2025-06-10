@@ -45,7 +45,8 @@ MEMORY_API mem_ptr_t MACHINE(calloc)(mem_size_t count, mem_size_t size) MEMORY_N
  * @param bytes New size in bytes.
  * @return Pointer to the reallocated memory, or nullptr on failure.
  */
-MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(realloc)(mem_ptr_t ptr, mem_size_t bytes) MEMORY_NODISCARD MEMORY_CHECK_SIZE(2);
+MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(realloc)(mem_ptr_t ptr, mem_size_t bytes) MEMORY_NODISCARD
+    MEMORY_CHECK_SIZE(2);
 
 /**
  * @brief Allocates a block of memory with the specified alignment.
@@ -53,7 +54,8 @@ MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(realloc)(mem_ptr_t ptr, mem_size_t byt
  * @param bytes Number of bytes to allocate.
  * @return Pointer to the allocated memory, or nullptr on failure.
  */
-MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(aligned_alloc)(mem_size_t alignment, mem_size_t bytes) MEMORY_NODISCARD MEMORY_CHECK_SIZE(1, 2);
+MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(aligned_alloc)(mem_size_t alignment, mem_size_t bytes) MEMORY_NODISCARD
+    MEMORY_CHECK_SIZE(1, 2);
 
 /**
  * @brief Allocates a block of memory using the onlyfree allocator.
@@ -68,7 +70,8 @@ MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(malloc_onlyfree)(mem_size_t bytes) MEM
  * @param size Size of each element in bytes.
  * @return Pointer to the allocated memory, or nullptr on failure.
  */
-MEMORY_API mem_ptr_t MACHINE(calloc_onlyfree)(mem_size_t count, mem_size_t size) MEMORY_NODISCARD MEMORY_CHECK_SIZE(1, 2);
+MEMORY_API mem_ptr_t MACHINE(calloc_onlyfree)(mem_size_t count, mem_size_t size) MEMORY_NODISCARD
+    MEMORY_CHECK_SIZE(1, 2);
 
 /**
  * @brief Changes the size of the memory block using the onlyfree allocator.
@@ -76,7 +79,8 @@ MEMORY_API mem_ptr_t MACHINE(calloc_onlyfree)(mem_size_t count, mem_size_t size)
  * @param bytes New size in bytes.
  * @return Pointer to the reallocated memory, or nullptr on failure.
  */
-MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(realloc_onlyfree)(mem_ptr_t ptr, mem_size_t bytes) MEMORY_NODISCARD MEMORY_CHECK_SIZE(2);
+MEMORY_API MEMORY_ALLOC mem_ptr_t MACHINE(realloc_onlyfree)(mem_ptr_t ptr, mem_size_t bytes) MEMORY_NODISCARD
+    MEMORY_CHECK_SIZE(2);
 
 /**
  * @brief Frees a previously allocated memory block.
@@ -109,35 +113,67 @@ MEMORY_API void MACHINE(unhook)(void);
 }
 #endif
 
-#if defined(DISABLED)
 #if defined(__cplusplus)
+#if COMPILER_MSVC
+#pragma warning(push)
+#pragma warning(disable : 28251)
+#endif
 /**
  * @brief Overloads operator new to use custom memory allocation.
  * @param bytes Number of bytes to allocate.
  * @throws std::bad_alloc if allocation fails.
  */
-[[nodiscard]] void* operator new(std::size_t bytes);
+[[nodiscard]] MEMORY_ALLOC void* MEMORY_CALL operator new(std::size_t bytes) noexcept(false)
+{
+    if (bytes == 0)
+        ++bytes; // Ensure non-zero allocation
+    void* ptr = MACHINE(malloc)(bytes);
+    if (!ptr)
+    {
+        throw std::bad_alloc();
+    }
+    return ptr;
+}
 
 /**
  * @brief Overloads operator new[] to use custom memory allocation.
  * @param bytes Number of bytes to allocate.
  * @throws std::bad_alloc if allocation fails.
  */
-[[nodiscard]] void* operator new[](std::size_t bytes);
+[[nodiscard]] MEMORY_ALLOC void* MEMORY_CALL operator new[](std::size_t bytes) noexcept(false)
+{
+    if (bytes == 0)
+        ++bytes; // Ensure non-zero allocation
+    void* ptr = MACHINE(malloc)(bytes);
+    if (!ptr)
+    {
+        throw std::bad_alloc();
+    }
+    return ptr;
+}
+
+#if COMPILER_MSVC
+#pragma warning(pop)
+#endif
 
 /**
  * @brief Overloads operator delete to use custom memory deallocation.
  * @param ptr Pointer to the memory block to free.
  */
-void operator delete(void* ptr) noexcept;
+void operator delete(void* ptr) noexcept
+{
+    MACHINE(free)(ptr);
+}
 
 /**
  * @brief Overloads operator delete[] to use custom memory deallocation.
  * @param ptr Pointer to the memory block to free.
  */
-void operator delete[](void* ptr) noexcept;
+void operator delete[](void* ptr) noexcept
+{
+    MACHINE(free)(ptr);
+}
 
-#endif
 #endif
 
 // Undefine standard memory function macros if already defined

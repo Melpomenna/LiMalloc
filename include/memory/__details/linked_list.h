@@ -23,8 +23,8 @@ typedef struct LinkedList
 {
     struct LinkedList* next; /**< Pointer to the next node in the list. */
     struct LinkedList* back; /**< Pointer to the previous node in the list. */
-    int space;               /**< Size of the memory block. */
-    int isFree;              /**< Flag indicating if the block is free (non-zero if free). */
+    int space; /**< Size of the memory block. */
+    int isFree; /**< Flag indicating if the block is free (non-zero if free). */
 } LinkedList_t;
 
 /**
@@ -34,9 +34,9 @@ typedef struct LinkedList
  */
 typedef struct ComprassedPair
 {
-    LinkedList_t* begin;     /**< Pointer to the first node in the list. */
-    LinkedList_t* end;       /**< Pointer to the last node in the list. */
-    mem_size_t freeSpace;    /**< Total free space in the list. */
+    LinkedList_t* begin; /**< Pointer to the first node in the list. */
+    LinkedList_t* end; /**< Pointer to the last node in the list. */
+    mem_size_t freeSpace; /**< Total free space in the list. */
 } ComprassedPair_t;
 
 #if defined(__cplusplus)
@@ -49,7 +49,7 @@ extern "C" {
  * @param space Size of the memory block.
  * @return Pointer to the newly created LinkedList_t node.
  */
-MEMORY_NODISCARD MEMORY_API LinkedList_t* MEMORY_CALL  createNode(void* ptr, int space);
+MEMORY_NODISCARD MEMORY_API LinkedList_t* MEMORY_CALL createNode(void* ptr, int space);
 
 /**
  * @brief Adds a node to the end of the linked list.
@@ -79,7 +79,22 @@ MEMORY_API void MEMORY_CALL removeNode(ComprassedPair_t* root, LinkedList_t* nod
  * @param second Pointer to the second LinkedList_t node.
  * @return Pointer to the merged LinkedList_t node.
  */
-MEMORY_NODISCARD MEMORY_API LinkedList_t* MEMORY_CALL mergeNode(ComprassedPair_t* root, LinkedList_t* first, LinkedList_t* second);
+MEMORY_NODISCARD MEMORY_API LinkedList_t* MEMORY_CALL mergeNode(ComprassedPair_t* root, LinkedList_t* first,
+                                                                LinkedList_t* second);
+
+
+/**
+ * @brief Inserts a node after a specified node in the linked list.
+ *
+ * This function inserts the given node immediately after the specified iterator node
+ * within the linked list represented by the root. The function updates the pointers
+ * of the involved nodes and adjusts the begin and end pointers of the list if necessary.
+ *
+ * @param root Pointer to the ComprassedPair_t representing the list.
+ * @param it Pointer to the LinkedList_t node after which the new node will be inserted.
+ * @param node Pointer to the LinkedList_t node to insert.
+ */
+MEMORY_API void MEMORY_CALL insertAfter(ComprassedPair_t* root, LinkedList_t* it, LinkedList_t* node);
 
 #if defined(__cplusplus)
 }

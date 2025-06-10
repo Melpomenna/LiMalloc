@@ -1,5 +1,9 @@
-#include <memory/__details/linked_list.h>
 #include <memory/export.h>
+#if COMPILER_MSVC
+#pragma warning(disable : 4245 6326 4081 26439 26495)
+#endif
+
+#include <memory/__details/linked_list.h>
 
 LinkedList_t* createNode(void* ptr, int space)
 {
@@ -89,13 +93,31 @@ void removeNode(ComprassedPair_t* root, LinkedList_t* node)
 
 LinkedList_t* mergeNode(ComprassedPair_t* root, LinkedList_t* first, LinkedList_t* second)
 {
-    if (MEMORY_UNLIKY(!root || !first || !second ||
-                      (first->next != second) ||
-                      (first == root->begin && second == root->end)
-                      || ((char*)first+first->space+sizeof(LinkedList_t) != (char*)second)))
+    if (MEMORY_UNLIKY(!root || !first || !second || (first->next != second) ||
+                      (first == root->begin && second == root->end) ||
+                      ((char*)first + first->space + sizeof(LinkedList_t) != (char*)second)))
         return 0;
     int totalSpace = first->space + second->space + sizeof(LinkedList_t);
     first->space = totalSpace;
     removeNode(root, second);
     return first;
+}
+
+
+void insertAfter(ComprassedPair_t* root, LinkedList_t* it, LinkedList_t* node)
+{
+    if (MEMORY_UNLIKY(!root || !node || !it))
+        return;
+    if (MEMORY_UNLIKY(root->begin == 0 && root->end == 0))
+    {
+        root->begin = node;
+        root->end = node;
+        return;
+    }
+
+    LinkedList_t* next = it->next;
+    node->back = it;
+    node->next = next;
+    next->back = node;
+    it->next = node;
 }

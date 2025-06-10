@@ -42,10 +42,10 @@ typedef int (*func_deallocate)(mem_ptr_t, mem_size_t);
  */
 typedef enum PageAccess
 {
-    MEMORY_PAGE_READ = PROT_READ,                /**< Read access */
-    MEMORY_PAGE_WRITE = PROT_WRITE,              /**< Write access */
-    MEMORY_PAGE_EXEC = PROT_EXEC,                /**< Execute access */
-    MEMORY_PAGE_NONE = PROT_NONE,                /**< No access */
+    MEMORY_PAGE_READ = PROT_READ, /**< Read access */
+    MEMORY_PAGE_WRITE = PROT_WRITE, /**< Write access */
+    MEMORY_PAGE_EXEC = PROT_EXEC, /**< Execute access */
+    MEMORY_PAGE_NONE = PROT_NONE, /**< No access */
     MEMORY_PAGE_READ_WRITE = PROT_READ | PROT_WRITE /**< Read and write access */
 } PageAccess_t;
 
@@ -55,10 +55,10 @@ typedef enum PageAccess
  */
 typedef enum MemoryMapFlags
 {
-    MEMORY_MAP_FIXED = MAP_FIXED,                /**< Map at fixed address */
-    MEMORY_MAP_SHARED = MAP_SHARED,              /**< Share changes */
-    MEMORY_MAP_PRIVATE = MAP_PRIVATE,            /**< Private mapping */
-    MEMORY_MAP_ANONYMOUS = MAP_ANONYMOUS         /**< Anonymous mapping */
+    MEMORY_MAP_FIXED = MAP_FIXED, /**< Map at fixed address */
+    MEMORY_MAP_SHARED = MAP_SHARED, /**< Share changes */
+    MEMORY_MAP_PRIVATE = MAP_PRIVATE, /**< Private mapping */
+    MEMORY_MAP_ANONYMOUS = MAP_ANONYMOUS /**< Anonymous mapping */
 } MemoryMapFlags_t;
 
 #else
@@ -89,11 +89,11 @@ typedef int (*func_deallocate)(LPVOID, SIZE_T, DWORD);
  */
 typedef enum PageAccess
 {
-    MEMORY_PAGE_READ = PAGE_READONLY,            /**< Read-only access */
-    MEMORY_PAGE_WRITE = PAGE_WRITECOPY,          /**< Write-copy access */
-    MEMORY_PAGE_EXEC = PAGE_EXECUTE,             /**< Execute access */
-    MEMORY_PAGE_NONE = PAGE_NOACCESS,            /**< No access */
-    MEMORY_PAGE_READ_WRITE = PAGE_READWRITE      /**< Read and write access */
+    MEMORY_PAGE_READ = PAGE_READONLY, /**< Read-only access */
+    MEMORY_PAGE_WRITE = PAGE_WRITECOPY, /**< Write-copy access */
+    MEMORY_PAGE_EXEC = PAGE_EXECUTE, /**< Execute access */
+    MEMORY_PAGE_NONE = PAGE_NOACCESS, /**< No access */
+    MEMORY_PAGE_READ_WRITE = PAGE_READWRITE /**< Read and write access */
 } PageAccess_t;
 
 /**
@@ -102,26 +102,26 @@ typedef enum PageAccess
  */
 typedef enum MemAllocFreeType
 {
-    MEMORY_COMMIT = MEM_COMMIT,                          /**< Commit memory */
-    MEMORY_RESERVE = MEM_RESERVE,                        /**< Reserve memory */
-    MEMORY_REPLACE_PLACEHOLDER = MEM_REPLACE_PLACEHOLDER,/**< Replace placeholder */
-    MEMORY_RESERVE_PLACEHOLDER = MEM_RESERVE_PLACEHOLDER,/**< Reserve placeholder */
-    MEMORY_RESET = MEM_RESET,                            /**< Reset memory */
-    MEMORY_TOP_DOW = MEM_TOP_DOWN,                       /**< Top-down allocation */
-    MEMORY_WRITE_WATCH = MEM_WRITE_WATCH,                /**< Write-watch */
-    MEMORY_PHYSICAL = MEM_PHYSICAL,                      /**< Physical memory */
-    MEMORY_ROTATE = MEM_ROTATE,                          /**< Rotate memory */
+    MEMORY_COMMIT = MEM_COMMIT, /**< Commit memory */
+    MEMORY_RESERVE = MEM_RESERVE, /**< Reserve memory */
+    MEMORY_REPLACE_PLACEHOLDER = MEM_REPLACE_PLACEHOLDER, /**< Replace placeholder */
+    MEMORY_RESERVE_PLACEHOLDER = MEM_RESERVE_PLACEHOLDER, /**< Reserve placeholder */
+    MEMORY_RESET = MEM_RESET, /**< Reset memory */
+    MEMORY_TOP_DOW = MEM_TOP_DOWN, /**< Top-down allocation */
+    MEMORY_WRITE_WATCH = MEM_WRITE_WATCH, /**< Write-watch */
+    MEMORY_PHYSICAL = MEM_PHYSICAL, /**< Physical memory */
+    MEMORY_ROTATE = MEM_ROTATE, /**< Rotate memory */
     MEMORY_DIFFERENT_IMAGE_BASE_OK = MEM_DIFFERENT_IMAGE_BASE_OK, /**< Different image base OK */
-    MEMORY_RESET_UNDO = MEM_RESET_UNDO,                  /**< Undo reset */
-    MEMORY_LARGE_PAGES = MEM_LARGE_PAGES,                /**< Large pages */
-    MEMORY_4MB_PAGES = MEM_4MB_PAGES,                    /**< 4MB pages */
-    MEMORY_64K_PAGES = MEM_64K_PAGES,                    /**< 64K pages */
+    MEMORY_RESET_UNDO = MEM_RESET_UNDO, /**< Undo reset */
+    MEMORY_LARGE_PAGES = MEM_LARGE_PAGES, /**< Large pages */
+    MEMORY_4MB_PAGES = MEM_4MB_PAGES, /**< 4MB pages */
+    MEMORY_64K_PAGES = MEM_64K_PAGES, /**< 64K pages */
     MEMORY_UNMAP_WITH_TRANSIENT_BOOST = MEM_UNMAP_WITH_TRANSIENT_BOOST, /**< Unmap with boost */
-    MEMORY_COALESCE_PLACEHOLDERS = MEM_COALESCE_PLACEHOLDERS,          /**< Coalesce placeholders */
-    MEMORY_PRESERVE_PLACEHOLDER = MEM_PRESERVE_PLACEHOLDER,            /**< Preserve placeholder */
-    MEMORY_DECOMMIT = MEM_DECOMMIT,                      /**< Decommit memory */
-    MEMORY_RELEASE = MEM_RELEASE,                        /**< Release memory */
-    MEMORY_FREE = MEM_FREE                               /**< Free memory */
+    MEMORY_COALESCE_PLACEHOLDERS = MEM_COALESCE_PLACEHOLDERS, /**< Coalesce placeholders */
+    MEMORY_PRESERVE_PLACEHOLDER = MEM_PRESERVE_PLACEHOLDER, /**< Preserve placeholder */
+    MEMORY_DECOMMIT = MEM_DECOMMIT, /**< Decommit memory */
+    MEMORY_RELEASE = MEM_RELEASE, /**< Release memory */
+    MEMORY_FREE = MEM_FREE /**< Free memory */
 } MemAllocFreeType_t;
 
 #endif
@@ -175,10 +175,10 @@ typedef void(MEMORY_CALL* func_unlock)(void);
  */
 typedef enum PageSpace
 {
-    MEMORY_SPACE_SMALL = 8,      /**< Small page size */
-    MEMORY_SPACE_MEDIUM = 64,    /**< Medium page size */
-    MEMORY_SPACE_LARGE = 128,    /**< Large page size */
-    MEMORY_SPACE_HUGE = 512      /**< Huge page size */
+    MEMORY_SPACE_SMALL = 8, /**< Small page size */
+    MEMORY_SPACE_MEDIUM = 64, /**< Medium page size */
+    MEMORY_SPACE_LARGE = 128, /**< Large page size */
+    MEMORY_SPACE_HUGE = 512 /**< Huge page size */
 } PageSpace_t;
 
 /** @def MEMORY_HUGE_PAGES_COUNT
@@ -230,7 +230,7 @@ struct ComprassedPair;
  * @def MEMORY_DEFAULT_SPACE
  * @brief Default total memory space.
  */
-#define MEMORY_DEFAULT_SPACE \
+#define MEMORY_DEFAULT_SPACE                                                                                           \
     MEMORY_SMALL_PAGE_SPACE + MEMORY_MEDIUM_PAGE_SPACE + MEMORY_LARGE_PAGE_SPACE + MEMORY_HUGE_PAGE_SPACE
 
 /**
@@ -239,8 +239,8 @@ struct ComprassedPair;
  */
 typedef struct Allocator
 {
-    func_allocate allocate;  /**< Allocation function */
-    func_protect protect;    /**< Protection function */
+    func_allocate allocate; /**< Allocation function */
+    func_protect protect; /**< Protection function */
     func_deallocate deallocate; /**< Deallocation function */
 } Allocator_t;
 
@@ -250,8 +250,8 @@ typedef struct Allocator
  */
 typedef struct KernelMutex
 {
-    func_lock lock;      /**< Lock function */
-    func_unlock unlock;  /**< Unlock function */
+    func_lock lock; /**< Lock function */
+    func_unlock unlock; /**< Unlock function */
 } KernelMutex_t;
 
 /**
@@ -260,10 +260,10 @@ typedef struct KernelMutex
  */
 typedef struct Area
 {
-    Allocator_t allocator;                /**< Allocator functions */
-    KernelMutex_t kernelMutex;            /**< Kernel mutex functions */
-    struct ComprassedPair* root;          /**< Root of the memory area */
-    mem_size_t isInited;                  /**< Initialization flag */
+    Allocator_t allocator; /**< Allocator functions */
+    KernelMutex_t kernelMutex; /**< Kernel mutex functions */ // TODO: Chang to lock free
+    struct ComprassedPair* root; /**< Root of the memory area */
+    mem_size_t isInited; /**< Initialization flag */
 } Area_t;
 
 #if defined(__cplusplus)

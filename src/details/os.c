@@ -53,7 +53,8 @@ void MEMORY_INIT MEMORY_CALL __init()
 #else
     DEBUG_LOG("__init(): totalSpace:%llu\n", totalAllocatedSpace);
     VirtualAlloc(0, totalAllocatedSpace, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-    void* mem = memoryPoolArea.allocator.allocate(0, totalAllocatedSpace, MEMORY_COMMIT | MEMORY_RESERVE, MEMORY_PAGE_READ_WRITE);
+    void* mem = memoryPoolArea.allocator.allocate(0, totalAllocatedSpace, MEMORY_COMMIT | MEMORY_RESERVE,
+                                                  MEMORY_PAGE_READ_WRITE);
 #endif
     if (MEMORY_UNLIKY(!mem))
     {

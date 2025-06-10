@@ -1,6 +1,10 @@
+#include <memory/memory.h>
+#if COMPILER_MSVC
+#pragma warning(disable : 4245 6326 4081 26439 26495)
+#endif
+
 #include <gtest/gtest.h>
 #include <memory/__details/internal.h>
-#include <memory/memory.h>
 
 class MallocTest : public ::testing::Test
 {
@@ -52,7 +56,8 @@ TEST_F(MallocTest, MallocAllocateMaxBytesPassed)
 
 TEST_F(MallocTest, MallocAllocateInThread)
 {
-    auto threadFunc = []() {
+    auto threadFunc = []()
+    {
         int* ptr = (int*)malloc(100);
         ASSERT_TRUE(ptr != nullptr);
         for (int i = 0; i < 25; ++i)
@@ -65,7 +70,7 @@ TEST_F(MallocTest, MallocAllocateInThread)
         }
         free(ptr);
     };
-    
+
     std::thread worker(threadFunc);
     std::thread worker2(threadFunc);
     worker.join();
@@ -80,7 +85,7 @@ TEST_F(MallocTest, MallocAllocateLarge10KBytes)
     ASSERT_TRUE(ptr != nullptr);
     for (size_t i = 0; i < largeSize / sizeof(int); ++i)
     {
-        ptr[i] = i;
+        ptr[i] = static_cast<int>(i);
     }
     for (size_t i = 0; i < largeSize / sizeof(int); ++i)
     {
@@ -98,7 +103,7 @@ TEST_F(MallocTest, MallocAllocateSmallBytesNotAlignedBy8Bytes)
     ASSERT_TRUE(ptr != nullptr);
     for (size_t i = 0; i < arrSize; ++i)
     {
-        ptr[i] = i;
+        ptr[i] = static_cast<int>(i);
     }
     for (size_t i = 0; i < arrSize; ++i)
     {
